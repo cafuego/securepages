@@ -46,8 +46,6 @@ function securepages_boot() {
  * Implementation of hook_init().
  */
 function securepages_init() {
-  securepages_redirect();
-
   if (!variable_get('securepages_enable', 0) || basename($_SERVER['PHP_SELF']) != 'index.php') {
     return;
   }
@@ -252,7 +250,17 @@ function securepages_match($path) {
  *   The number of roles set on the user that require https enforcing.
  */
 function securepages_roles($account) {
-  $matches = array_intersect_key($account->roles, variable_get('securepages_roles', array()));
+  // All rids are in the settings, so first we need to filter out the ones
+  // that aren't enabled. Otherwise this would match positive against all
+  // roles a user has set.
+  //
+  $roles = array();
+  foreach (variable_get('securepages_roles', array()) as $rid => $enabled) {
+    if ($enabled) {
+      $roles[$rid] = $rid;
+    }
+  }
+  $matches = array_intersect_key($account->roles, $roles);
   return count($matches);
 }
 
