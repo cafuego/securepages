@@ -61,6 +61,13 @@
      '#rows' => 5,
      '#description' => t("The pages listed here will be ignored and be either returned in http or https. Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are '<em>blog</em>' for the blog page and '<em>blog/*</em>' for every personal blog. '<em>&lt;front&gt;</em>' is the front page."),
    );
+   $form['securepages_roles'] = array(
+     '#type' => 'checkboxes',
+     '#title' => 'User roles',
+     '#description' => t('Check all roles that should be forced to always use the site via https.'),
+     '#options' => user_roles(TRUE),
+     '#default_value' => variable_get('securepages_roles', array()),
+   );
    return system_settings_form($form);
  }
  
