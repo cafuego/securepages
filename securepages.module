@@ -254,12 +254,7 @@ function securepages_roles($account) {
   // that aren't enabled. Otherwise this would match positive against all
   // roles a user has set.
   //
-  $roles = array();
-  foreach (variable_get('securepages_roles', array()) as $rid => $enabled) {
-    if ($enabled) {
-      $roles[$rid] = $rid;
-    }
-  }
+  $roles = array_filter(variable_get('securepages_roles', array()));
   $matches = array_intersect_key($account->roles, $roles);
   return count($matches);
 }
